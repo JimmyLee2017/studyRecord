@@ -91,6 +91,42 @@ git clone git@github.com:michaelliao/gitskills.git
 使用https除了速度慢以外，还有个最大的麻烦是每次推送都必须输入口令，但是在某些只开放http端口的公司内部就无法使用ssh协议而只能用https
 要克隆一个仓库，首先必须知道仓库的地址，然后使用git clone命令克隆。
 Git支持多种协议，包括https，但通过ssh支持的原生git协议速度最快。
+---------------------------------------------
+--创建与合并分支
+Master个分支的核心思想是HEAD的指向，HEAD指向Master，那么在Master上，创建分支和在分支运行的时候，HEAD指向分支，如果要合并，将Master移动到分支处，并重新指向Master即可。
+创建并切换分支命令：	git checkout -b dev
+-b 在这里表示创建并切换，由两个部分组成：
+git branch dev
+git checkout dev
+查看分支命令:	git branch
+有星号的表示当前分支
+在分支上的提交commit操作和主分支是一样的
+合并分支:	git merge 分支名
+删除分支:	git branch -d 分支名
+回到主分支:	git checkout master
+----------------------------------------------
+--解决冲突
+当合并出现冲突的时候，主要的情况是分支上和主分支上提交的内容不一致导致，这个时候回到主分支，并解决掉冲突的部分，然后重新提交合并。
+使用 git log --graph 可以查看分支情况，如本例中使用了
+git log --graph --pretty=oneline --abbrev-commit
+-----------------------------------------------
+--分支合并方式	Fast forward 和 --no-ff
+通常，合并分支的时候，Git 会默认用Fast forward方式进行合并，这种合并方式情况下，如果删除分支后，会丢掉分支信息。如果使用--no-ff方式，Git在合并的时候生成一个新的commit，这样，可以重分支历史上查询到分支信息。
+-----------------------------------------------
+--Bug分支
+当我们正在一个dev分支上处理意见事情，然后忽然发现另外一个文件有一个bug，我们必须马上去解决。但是现在dev分支占据了工作区域，这个时候该怎么处理呢。可以按照如下步骤进行
+1，把dev分支的工作内容先保存到 stash区域去：	git stash
+2，切换到master区域：	git checkout master
+3，创建一个debug分支:	git checkout -b issue101
+4，在这个分支上修改bug，修改好后提交并合并:	git add xxx/git commit -m "dddddd"
+5，回到主分支，合并issue101分支并删除它：	git checkout master/git merge --no-f -m "ddddddd" issue101/git branch -d issue101
+6，回到dev分支：	git checkout dev
+7，从stash 调出刚才临时保存进去的dev工作区内容： 注意，这里与两种方式：
+a,使用git stash pop , 用这种方式，把工作区内容从stash恢复回来并在stash里面删除
+b,使用git stash apply恢复，然后再用git stash drop来删除stash区域临时保存的内容
+如果只有一个工作临时保存在stash区域，可以使用a方式，但是如果有多个分支临时工作保存在stash中，那么必须使用b方式了，可以先用 git stash list来查看stash区域的内容，然后通过git stash apply stash@{0} 来恢复工作，然后再git stash drop stash@{0}
+
+
 
 
 
