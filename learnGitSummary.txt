@@ -15,7 +15,7 @@ git init
 ------------------------------------
 --查看历史版本cat
 git log 查看历史记录
-git log --pretty=onlin
+git log --pretty=oneline
 在返回历史版本的时候,HEAD表示当前版本，HEAD^表示上一版本，HEAD^^表示上两个版本，而HEAD~100表示上一百个版本.
 那么返回上一版本可以借助HEAD和git reset --hard HEAD^来操作了。
 当然，也可以通过git reset --hard commit id (不需要写全，写前面几位即可）来实现过往或者后面版本的恢复来实现过往或者后面版本的恢复
@@ -125,6 +125,82 @@ git log --graph --pretty=oneline --abbrev-commit
 a,使用git stash pop , 用这种方式，把工作区内容从stash恢复回来并在stash里面删除
 b,使用git stash apply恢复，然后再用git stash drop来删除stash区域临时保存的内容
 如果只有一个工作临时保存在stash区域，可以使用a方式，但是如果有多个分支临时工作保存在stash中，那么必须使用b方式了，可以先用 git stash list来查看stash区域的内容，然后通过git stash apply stash@{0} 来恢复工作，然后再git stash drop stash@{0}
+----------------------------------------
+--强行删除未合并过的分支
+如果一个分支已经提交，但是还没有合并，使用 git branch -d 分支名 会报错，如果必须强行删除，可以使用 git branch -D 分支名
+---------------------------------------
+--多人协作
+查看远程库信息，使用git remote -v；
+本地新建的分支如果不推送到远程，对其他人就是不可见的；
+从本地推送分支，使用git push origin branch-name，如果推送失败，先用git pull抓取远程的新提交；
+在本地创建和远程分支对应的分支，使用git checkout -b branch-name origin/branch-name，本地和远程分支的名称最好一致；
+建立本地分支和远程分支的关联，使用git branch --set-upstream branch-name origin/branch-name；
+从远程抓取分支，使用git pull，如果有冲突，要先处理冲突。
+
+多人协作的工作模式通常是这样：
+首先，可以试图用git push origin branch-name推送自己的修改；
+如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
+如果合并有冲突，则解决冲突，并在本地提交；
+没有冲突或者解决掉冲突后，再用git push origin branch-name推送就能成功！
+如果git pull提示“no tracking information”，则说明本地分支和远程分支的链接关系没有创建，用命令git branch --set-upstream branch-name origin/branch-name。
+--------------------------
+--创建标签
+命令git tag <name>用于新建一个标签，默认为HEAD，也可以指定一个commit id；
+git tag -a <tagname> -m "blablabla..."可以指定标签信息；
+git tag -s <tagname> -m "blablabla..."可以用PGP签名标签；
+命令git tag可以查看所有标签。
+-------------------------
+--删除标签
+命令git push origin <tagname>可以推送一个本地标签；
+命令git push origin --tags可以推送全部未推送过的本地标签；
+命令git tag -d <tagname>可以删除一个本地标签；
+命令git push origin :refs/tags/<tagname>可以删除一个远程标签。
+------------------------------
+--Github
+在GitHub上，可以任意Fork开源仓库；
+自己拥有Fork后的仓库的读写权限；
+可以推送pull request给官方仓库来贡献代码。
+----------------------------------
+--设置多个push地址
+git remote rm origin 删除原来的push地址
+git remote add github git@github.com:JimmyLee2017/learngit.git 重新关联github，以后往这边的origin都用github代替
+git remote add gitee git@gitee.com:JimmyLee2017/learngit.git 关联gitee，以后往这边的origin都用github代替
+------------------------------------
+--自定义git
+让Git显示颜色，会让命令输出看起来更醒目：	git config --global color.ui true
+忽略某些文件时，需要编写.gitignore
+.gitignore文件本身要放到版本库里，并且可以对.gitignore做版本管理！
+注意建立好gitignore文件后，最后一步就是把.gitignore也提交到Git，就完成了！当然检验.gitignore的标准是git status命令是不是说working directory clean
+st就表示status：	git config --global alias.st status
+GitHub就是一个免费托管开源代码的远程仓库。但是对于某些视源代码如生命的商业公司来说，既不想公开源代码，又舍不得给GitHub交保护费，那就只能自己搭建一台Git服务器作为私有仓库使用。
+搭建Git服务器需要准备一台运行Linux的机器，强烈推荐用Ubuntu或Debian，这样，通过几条简单的apt命令就可以完成安装。
+假设你已经有sudo权限的用户账号，下面，正式开始安装。
+第一步，安装git：
+$ sudo apt-get install git
+第二步，创建一个git用户，用来运行git服务：
+$ sudo adduser git
+第三步，创建证书登录：
+收集所有需要登录的用户的公钥，就是他们自己的id_rsa.pub文件，把所有公钥导入到/home/git/.ssh/authorized_keys文件里，一行一个。
+第四步，初始化Git仓库：
+先选定一个目录作为Git仓库，假定是/srv/sample.git，在/srv目录下输入命令：
+$ sudo git init --bare sample.git
+Git就会创建一个裸仓库，裸仓库没有工作区，因为服务器上的Git仓库纯粹是为了共享，所以不让用户直接登录到服务器上去改工作区，并且服务器上的Git仓库通常都以.git结尾。然后，把owner改为git：
+$ sudo chown -R git:git sample.git
+第五步，禁用shell登录：
+出于安全考虑，第二步创建的git用户不允许登录shell，这可以通过编辑/etc/passwd文件完成。找到类似下面的一行：
+git:x:1001:1001:,,,:/home/git:/bin/bash
+改为：
+git:x:1001:1001:,,,:/home/git:/usr/bin/git-shell
+这样，git用户可以正常通过ssh使用git，但无法登录shell，因为我们为git用户指定的git-shell每次一登录就自动退出。
+第六步，克隆远程仓库：
+现在，可以通过git clone命令克隆远程仓库了，在各自的电脑上运行：
+$ git clone git@server:/srv/sample.git
+Cloning into 'sample'...
+warning: You appear to have cloned an empty repository.
+剩下的推送就简单了。
+管理公钥
+如果团队很小，把每个人的公钥收集起来放到服务器的/home/git/.ssh/authorized_keys文件里就是可行的。如果团队有几百号人，就没法这么玩了，这时，可以用Gitosis来管理公钥。
+
 
 
 
