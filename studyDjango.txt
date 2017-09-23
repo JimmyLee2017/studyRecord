@@ -1,0 +1,57 @@
+Daango学习
+-----------------------------------
+一些设置
+	要在某个目录建立一个虚拟环境，需要执行如下操作（如果有些程序已经安装则忽略即可）
+		sudo apt-get install -y python-pip
+		sudo pip install virtualenv
+		virtualenv VENV
+		srouce VENV/bin/activate
+		pip install django
+	在创建了APP后，需要在setting.py的INSTALL_APPS列表中增加APP的名称。如下：
+		INSTALL_APPS = [
+			'django.contrib.admin',
+			...
+			'diango.contrib.staticfiles',
+			'mainsite',
+		]
+	时区修改：在setting.py得TIME_ZONE = 'Asia/Beijing'
+	其他的对应修改可以根据setting.py的内容详细了解
+------------------------------------
+一些命令：
+	开始一个新项目：django-admin startproject <projectName>
+	开一一个新应用：进入项目根目录下后，输入：python manage.py startadpp <appName>
+	查看一个项目的Tree，回到项目的外目录：tree <projectName>
+	启动项目服务：python manage.py runserver 127.0.0.1:8000，（当然也可以kill掉占用端口的进程，具体后面有讲，此处想知道的同学可查下 lsof 命令用法）
+	创建更改的文件：python manage.py makemigrations
+	将生成的py文件应用到数据库：python manage.py migrate
+	清空数据库：python manage.py flush，此命令会询问是 yes 还是 no, 选择 yes 会把数据全部清空掉，只留下空表
+	创建超级管理员：python manage.py createsuperuser
+	导出数据：python manage.py dumpdata appname > appname.json
+	导入数据：python manage.py loaddata appname.json
+	Django 项目环境终端：python manage.py shell，如果你安装了 bpython 或 ipython 会自动用它们的界面，推荐安装 bpython。这个命令和 直接运行 python 或 bpython 进入 shell 的区别是：你可以在这个 shell 里面调用当前项目的 models.py 中的 API，对于操作数据，还有一些小测试非常方便；
+	数据库命令行：python manage.py dbshell，Django 会自动进入在settings.py中设置的数据库，如果是 MySQL 或 postgreSQL,会要求输入数据库用户密码。在这个终端可以执行数据库的SQL语句。如果您对SQL比较熟悉，可能喜欢这种方式
+	更多命令：终端上输入 python manage.py 可以看到详细的列表，在忘记子名称的时候特别有用。
+	
+	
+------------------------------------
+一些Bug解决办法
+	Django服务启动后，提示还没有设定IP为hostName，需要到setting.py里面去的ALLOW_HOSTS加上对应的IP地址；具体如下
+		ALLOWED_HOSTS = ['127.0.0.1','192.168.9.209','localhost'] 
+		详情可以参考django 1.8.2的中文文档
+	
+-----------------------------------
+一些知识点：
+	managy.py 是Django用来管理网站配置的文件，是一个接收命令行指令的工具程序，Django所有命令都是执行此程序；
+	建立好的项目文件夹里面有一个和项目名相同的的文佳佳，在这里面有setting.py,urls.py,wsgi.py;
+	urls.py：用来设置每一个URL的网址要对应的函数以及对应的程序，通常是创建新的网页时需要先编辑这个文件；
+	setting.py：是此网站的系统设置所在的位置，新创建的网站都要先打开这个文件，进行编辑设置操作。
+	wsgi.py：是和虚拟主机中的网页服务器（如Apache）沟通的接口，后面有详细介绍；
+	views.py：处理用户发出的请求，从urls.py中对应过来, 通过渲染templates中的网页可以将显示内容，比如登陆后的用户名，用户请求的数据，输出到网页；
+	models.py：与数据库操作相关，存入或读取数据时用到这个，当然用不到数据库的时候 你可以不使用；
+	forms.py：表单，用户在浏览器上输入数据提交，对数据的验证工作以及输入框的生成等工作，当然你也可以不使用；
+	templates 文件夹：views.py 中的函数渲染templates中的Html模板，得到动态内容的网页，当然可以用缓存来提高速；
+	admin.py：后台，可以用很少量的代码就拥有一个强大的后台；
+	APP都单独存放在各自名字的目录下，使用这样的方式是让网站的每一个主要动能都成为一个单独的模块，方便处理，更方便这些功能模块的复用；
+	默认情况下，Django会使用SQLite存储数据库的内容，当我们使用python manage.py migrate的时候，就会产生一个叫做db.sqlite3文件，所有网站的数据都会村粗在这个文件里面，这是一个简化的SQL关系数据库系统，如果要迁移网站，需要带上这个文件；
+	
+	
