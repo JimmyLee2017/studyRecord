@@ -1,0 +1,21 @@
+(转自BeBeMo)
+ubuntu14.04系统会自带python2.7，请不要卸载它。不同版本的python可以共存在一个系统上。
+卸载之后，桌面系统会被影响。
+（1）sudo add-apt-repository ppa:fkrull/deadsnakes
+（2）sudo apt-get update
+（3）sudo apt-get install python3.5
+（4）sudo cp /usr/bin/python /usr/bin/python_bak，先备份
+（5）sudo rm /usr/bin/python，删除
+（6）sudo ln -s /usr/bin/python3.5 /usr/bin/python，默认设置成python3.5，重建软链接这样在终端中输入python默认就是 3.5版本了
+分析以上命令的含义：
+（1）PPA（Personal Package Archives）个人软件包集
+很多软件包由于各种原因吧，不能进入官方的Ubuntu软件仓库。为了方便Ubuntu用户使用，launchpad.net提供了ppa,允许用户建立自己的软件仓库，自由的上传软件。PPA也被用来对一些打算进入Ubuntu官方仓库的软件，或者某些软件的新版本进行测试。
+Launchpad是Ubuntu母公司canonical有限公司所架设的网站，是一个提供维护、支援或联络Ubuntu开发者的平台。
+针对Ubuntu而言，用https://launchpad.net/ubuntu/+ppas搜索更加准确。
+       fkrull/deadsnakes是ubuntu提供的python的repository。
+
+参考：
+Ubuntu下常用Repository
+http://www.codeweblog.com/ubuntu%E4%B8%8B%E5%B8%B8%E7%94%A8repository/ 
+ubuntu添加PPA源
+http://www.linuxidc.com/Linux/2012-12/75354.htm
