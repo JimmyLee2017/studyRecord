@@ -1,0 +1,6 @@
+1，通过SSH登陆synology
+2，在admin管理员界面下，输入wget https://bootstrap.pypa.io/get-pip.py --no-check-certificate
+3，sudo python get-pip.py
+4，sudo pip install django==1.11.5
+notes:
+在lilux下面，需要使用sudo来给予管理员权限，否则很多安装因为权限问题无法完成。
