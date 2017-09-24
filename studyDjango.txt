@@ -54,4 +54,13 @@ Daango学习
 	APP都单独存放在各自名字的目录下，使用这样的方式是让网站的每一个主要动能都成为一个单独的模块，方便处理，更方便这些功能模块的复用；
 	默认情况下，Django会使用SQLite存储数据库的内容，当我们使用python manage.py migrate的时候，就会产生一个叫做db.sqlite3文件，所有网站的数据都会存储在这个文件里面，这是一个简化的SQL关系数据库系统，如果要迁移网站，需要带上这个文件；
 	
+------------------------------
+views.py相关
+	Views.py:定义视图函数（访问页面时的内容）,就是负责提供内容；
+	我们在views.py里面都会使用from django.http import HttpResponse,这个HttpResponse是用来向网页返回内容的，就像python中的print一样，只不过HttpResponse是把内容显示到网页上；
+	我们在views里面进行函数定义的时候，第一个参数必须是request，与网页发来的请求有关，request里面包含get或者post的内容，用户浏览器，系统等信息都在里面；
+	
+---------------------------------
+urls.py
+	urls.py:定义视图函数相关的URL(网址),即规定 访问什么网址对应什么内容;
 	

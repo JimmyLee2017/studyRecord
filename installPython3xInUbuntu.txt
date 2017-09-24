@@ -19,3 +19,15 @@ Ubuntu下常用Repository
 http://www.codeweblog.com/ubuntu%E4%B8%8B%E5%B8%B8%E7%94%A8repository/ 
 ubuntu添加PPA源
 http://www.linuxidc.com/Linux/2012-12/75354.htm
+
+使用dpkg -L python来查看安装在什么目录。
+
+一个注意事项：
+今天遇到一个奇怪现象，按照上面的办法试图在VENV环境里面使用python3.5，但是发现更改后，很多已经安装的软件运行都出现问题，比如pip,比如virtualenv，因为这些东西都是在python2.7的基础上进行使用的。后来把python的默认值换成python2.7后，这些软件可以正常使用了。
+那么怎么在虚拟环境中让自己可以使用安装号的Python3.5呢，可以使用下面办法
+1，进入需要建立虚拟环境的文件夹；
+2，新建虚拟python环境：virtualenv -p /usr/bin/python2 vVENV或者virtualenv -p /usr/bin/python3 VENV；
+3，source VENV/bin/activate激活当前环境；
+4，运行python --version查询版本；
+5，使用deactivate退出虚拟环境。
+备注：如果遇到virtualenv没有安装，使用sudo pip install virtual 安装即可
