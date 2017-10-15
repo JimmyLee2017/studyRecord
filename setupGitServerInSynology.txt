@@ -10,7 +10,7 @@
 10，通过cd /volume1/gitRepos进入仓库目录；
 11，输入 git init --bare learngit.git 创建并初始化一个版本库；
 12，使用sudo -i切换到root账户（第一次会让你确认是否真的切换到这个账户，并且需要输入登陆密码，同管理员密码）；
-13，通过chown -R git:users learngit.git 赋予git对learngit.git这个板块拥有可执行的权限，否则，无法commit,无写入权限);
+13，cd /volume1/gitRepos进入仓库目录，通过chown -R git:users learngit.git 赋予git对learngit.git这个板块拥有可执行的权限，否则，无法commit,无写入权限);
 14，设置完成；
 15，通过git clone ssh://git@192.168.2.100/volume1/gitRepos/learngit.git将文件clone到本地
 16，通过git push -u origin master（第一次用-u,之后不需要）将本地文件推送（如果不是从服务器克隆下来的，需要先使用git remote add origin ssh://git@192.168.2.100/volume1/gitRepos/learngit.git 先进行关联,具体这方面的操作请参考studyRecord目录下的learnGitSummary.txt文档）
