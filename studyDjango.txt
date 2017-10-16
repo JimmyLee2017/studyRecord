@@ -327,7 +327,98 @@ Article.objects.filter(author__name='twz915').values('title')
 1. values_list 和 values 返回的并不是真正的 列表 或 字典，也是 queryset，他们也是 lazy evaluation 的（惰性评估，通俗地说，就是用的时候才真正的去数据库查）
 2. 如果查询后没有使用，在数据库更新后再使用，你发现得到在是新内容！！！如果想要旧内容保持着，数据库更新后不要变，可以 list 一下
 3. 如果只是遍历这些结果，没有必要 list 它们转成列表（浪费内存，数据量大的时候要更谨慎！！！）
+(此章节比较迷糊，后续再看)
+-------------------------
+Django 数据表更改
+Django 1.7.x 和后来的版本：
+Django 1.7.x 及以后的版本集成了 South 的功能，在修改models.py了后运行：
+python manage.py makemigrations
+python manage.py migrate
+这两行命令就会对我们的models.py 进行检测，自动发现需要更改的，应用到数据库中去。
 
-
-
-
+------------------
+Django 后台
+如何兼容python2.x和python3.x呢？
+示例如下：
+# coding:utf-8
+from __future__ import unicode_literals
+ 
+from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+ 
+@python_2_unicode_compatible
+class Article(models.Model):
+    title = models.CharField('标题', max_length=256)
+    content = models.TextField('内容')
+ 
+    pub_date = models.DateTimeField('发表时间', auto_now_add=True, editable = True)
+    update_time = models.DateTimeField('更新时间',auto_now=True, null=True)
+ 
+    def __str__(self):
+        return self.title
+python_2_unicode_compatible 会自动做一些处理去适应python不同的版本，本例中的 unicode_literals 可以让python2.x 也像 python3 那个处理 unicode 字符，以便有更好地兼容性。
+a,列表显示与字段相关的其它内容:list_display;
+b,搜索功能：search_fields = ('title', 'content',) 这样就可以按照 标题或内容搜索了;
+c,筛选功能：list_filter = ('status',) 这样就可以根据文章的状态去筛选，比如找出是草稿的文章
+d,1.定制加载的列表, 根据不同的人显示不同的内容列表，比如输入员只能看见自己输入的，审核员能看到所有的草稿，这时候就需要重写get_queryset方法
+class MyModelAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        qs = super(MyModelAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        else:
+            return qs.filter(author=request.user)
+该类实现的功能是如果是超级管理员就列出所有的，如果不是，就仅列出访问者自己相关的
+e,2.定制搜索功能（django 1.6及以上才有)
+class PersonAdmin(admin.ModelAdmin):
+    list_display = ('name', 'age')
+    search_fields = ('name',)
+ 
+    def get_search_results(self, request, queryset, search_term):
+        queryset, use_distinct = super(PersonAdmin, self).get_search_results(request, queryset, search_term)
+        try:
+            search_term_as_int = int(search_term)
+            queryset |= self.model.objects.filter(age=search_term_as_int)
+        except:
+            pass
+        return queryset, use_distinct
+queryset 是默认的结果，search_term 是在后台搜索的关键词
+f,修改保存时的一些操作，可以检查用户，保存的内容等，比如保存时加上添加人
+from django.contrib import admin
+ 
+class ArticleAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user
+        obj.save()
+其中obj是修改后的对象，form是返回的表单（修改后的），当新建一个对象时 change = False, 当修改一个对象时 change = True
+如果需要获取修改前的对象的内容可以用
+from django.contrib import admin
+ 
+class ArticleAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        obj_original = self.model.objects.get(pk=obj.pk)
+        obj.user = request.user
+        obj.save()
+那么又有问题了，这里如果原来的obj不存在，也就是如果我们是新建的一个怎么办呢，这时候可以用try,except的方法尝试获取,当然更好的方法是判断一下这个对象是新建还是修改，是新建就没有 obj_original，是修改就有
+from django.contrib import admin
+ 
+class ArticleAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        if change:# 更改的时候
+            obj_original = self.model.objects.get(pk=obj.pk)
+        else:# 新增的时候
+            obj_original = None
+ 
+        obj.user = request.user
+        obj.save()
+g,删除时做一些处理
+from django.contrib import admin
+ 
+class ArticleAdmin(admin.ModelAdmin):
+    def delete_model(self, request, obj):
+        """
+        Given a model instance delete it from the database.
+        """
+        # handle something here
+        obj.delete()
+---------------------
