@@ -1,0 +1,94 @@
+element14   
+username:   osolution2017
+email:      jimmylee@osolution.com.cn
+password:   Os123!@#
+API keys are:
+Product Search API: Basic
+Key: szf5e4dxntv7yyrz7mv5w2zw
+Application
+OSelement14
+Key: 
+szf5e4dxntv7yyrz7mv5w2zw 
+Status: 
+active 
+Key Rate Limits
+2
+Calls per second
+1,000
+Calls per day
+
+FEDDEV: KeyValue
+Key: kwepn89nrw7j2aspmkhpur72
+Application
+OSelement14
+Key: 
+kwepn89nrw7j2aspmkhpur72 
+Status: 
+waiting 
+Created: 
+Key Rate Limits
+100
+Calls per second
+5,000
+Calls per minute
+
+
+storeInfo.id Values:        cn.element14.com
+Request URL:
+https://api.element14.com/catalog/products
+?callInfo.responseDataFormat={XML|JSON}
+ &callInfo.omitXmlSchema={...}
+&callInfo.callback={...}
+&term={field:term} 
+&storeInfo.id={storeInfoId|...}
+&callInfo.apiKey={...}
+&userInfo.signature={...}
+&userInfo.timestamp={...}
+&userInfo.billAccNum={...}
+&userInfo.customerId={...}
+&userInfo.contractId={...}
+&resultsSettings.offset={...}
+&resultsSettings.numberOfResults={...}
+&resultsSettings.refinements.filters={rohsCompliant,inStock}
+&resultsSettings.responseGroup={none,small,medium,large, Prices, Inventory}
+
+Query Parameters:
+Parameter                               Description                                             Mandatory/Optional                  Sample Value
+callInfo.responseDataFormat             Determines output format.                               optional                            JSON
+                                        Can be XML or JSON.
+callInfo.omitXmlSchema                  String. Strip XML Namespace.
+                                        XML data format only.
+callInfo.callback                       String. JSONP callback wrapper name.
+                                        Not recommended for use with XML output.
+term                                    Issued as field:term, for example:                      mandatory                           term=manuPartNum:678901
+                                        any:fuse, id:123456, or manuPartNum:678901,                                                 term=id%3A1278613 
+                                        any: use for keyword search                                                                 1112555 
+                                        id: use for element14 part number search                                                    8477108
+                                        manuPartNum: use for manufacturer part number search.
+storeInfo.id                            cn.element14.com                                        mandatory
+callInfo.apiKey                         szf5e4dxntv7yyrz7mv5w2zw                                mandatory
+userInfo.signature                      Required when getting contract pricing.                 optional
+                                        See Calculating the Contract Pricing Signature.
+userInfo.timestamp                      Required when getting contract pricing                  optional
+userInfo.billAccNum                                                                             Not used
+userInfo.customerId                     Required when getting contract pricing                  optional
+userInfo.contractId                                                                             Not used
+resultsSettings.offset                                                                          mandatory for keyword search 
+                                                                                                - Not used for other functions
+resultsSettings.numberOfResults                                                                 mandatory for keyword search 
+                                                                                                - Not used for other functions
+resultsSettings.refinements.filters     Can be rohsCompliant or inStock.                        optional                            inStock
+resultsSettings.responseGroup           Can be small, medium, large, prices,                    optional                            small
+                                        inventory, and none. Small is the 
+                                        default if nothing is passed.
+
+if we need to search the PN = 1-726388-2 with price and instock back, we can use the following URL
+
+https://api.element14.com/catalog/products?term=manuPartNum:1-726388-2&storeInfo.id=cn.element14.com&resultsSettings.refinements.filters=&resultsSettings.responseGroup=medium&callInfo.omitXmlSchema=false&callInfo.callback=&callInfo.responseDataFormat=JSON&callInfo.apiKey=szf5e4dxntv7yyrz7mv5w2zw
+
+返回结果：
+{"manufacturerPartNumberSearchReturn":{"numberOfResults":1,"products":[{"sku":"2308760","displayName":"AMP - TE CONNECTIVITY - 1-726388-2 - \\u8FDE\\u63A5\\u7AEF\\u5B50, \\u63D2\\u7247\\u5F0F, PCB","productStatus":"defaultStatus","rohsStatusCode":"YES","packSize":1,"unitOfMeasure":"EACH","id":"pf_CN1_2308760_0","datasheets":[{"type":"3","description":"3D Product Image","url":"http://www.farnell.com/datasheets/1777380.pdf"},{"type":"D","description":"Drawing","url":"http://www.farnell.com/cad/1656211.pdf"},{"type":"T","description":"Technical Data Sheet","url":"http://www.farnell.com/datasheets/1656211.pdf"}],"prices":[{"to":90,"from":10,"cost":0.62},{"to":490,"from":100,"cost":0.59},{"to":990,"from":500,"cost":0.55},{"to":2490,"from":1000,"cost":0.53},{"to":4990,"from":2500,"cost":0.51},{"to":19990,"from":5000,"cost":0.49},{"to":49990,"from":20000,"cost":0.47},{"to":1000000000,"from":50000,"cost":0.46}],"vendorId":"25321","vendorName":"AMP - TE CONNECTIVITY","brandName":"AMP - TE CONNECTIVITY","translatedManufacturerPartNumber":"1-726388-2","translatedMinimumOrderQuality":10,"stock":{"level":484,"leastLeadTime":28,"status":1,"shipsFromMultipleWarehouses":false,"breakdown":[{"inv":484,"region":"UK","lead":28,"warehouse":"GB1"}],"regionalBreakdown":[{"level":484,"leastLeadTime":28,"status":1,"warehouse":"UK","shipsFromMultipleWarehouses":false}],"nominatedWarehouseDetails":null},"comingSoon":false,"vatHandlingCode":"SVAT","releaseStatusCode":-1,"isSpecialOrder":false,"isAwaitingRelease":false,"reeling":false,"discountReason":0}]}}
+
+{"manufacturerPartNumberSearchReturn":{"numberOfResults":1,"products":[{"sku":"9751513","displayName":"EPCOS - B81123C1472M000 - \\u819C\\u7535\\u5BB9, \\u805A\\u4E19\\u70EF, 4.7NF, 500V, \\u5F84\\u5411\\u5F15\\u7EBF","productStatus":"defaultStatus","rohsStatusCode":"YES","packSize":1,"unitOfMeasure":"EACH","id":"pf_CN1_9751513_0","datasheets":[{"type":"T","description":"Technical Data Sheet","url":"http://www.farnell.com/datasheets/1935282.pdf"},{"type":"U","description":"REACH SVHC: Safe Use Data ","url":"http://www.farnell.com/datasheets/927859.pdf"},{"type":"*","description":"Product Change Notice","url":"http://www.farnell.com/datasheets/1936057.pdf"}],"prices":[{"to":9,"from":1,"cost":7.69},{"to":99,"from":10,"cost":6.57},{"to":499,"from":100,"cost":6.04},{"to":1000000000,"from":500,"cost":5.82}],"vendorId":"21582","vendorName":"EPCOS","brandName":"EPCOS","translatedManufacturerPartNumber":"B81123C1472M000","translatedMinimumOrderQuality":1,"stock":{"level":2060,"leastLeadTime":28,"status":1,"shipsFromMultipleWarehouses":true,"breakdown":[{"inv":175,"region":"Shanghai","lead":0,"warehouse":"WGQ"},{"inv":1885,"region":"UK","lead":28,"warehouse":"GB1"}],"regionalBreakdown":[{"level":175,"leastLeadTime":0,"status":1,"warehouse":"Shanghai","shipsFromMultipleWarehouses":true},{"level":1885,"leastLeadTime":28,"status":1,"warehouse":"UK","shipsFromMultipleWarehouses":true}],"nominatedWarehouseDetails":null},"comingSoon":false,"publishingModule":"en/204162.xml","vatHandlingCode":"SVAT","releaseStatusCode":-1,"isSpecialOrder":false,"isAwaitingRelease":false,"reeling":false,"discountReason":0}]}}
+
+
