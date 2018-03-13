@@ -177,6 +177,8 @@ git tag -s <tagname> -m "blablabla..."可以用PGP签名标签；
 git remote rm origin 删除原来的push地址
 git remote add github git@github.com:JimmyLee2017/learngit.git 重新关联github，以后往这边的origin都用github代替
 git remote add gitee git@gitee.com:JimmyLee2017/learngit.git 关联gitee，以后往这边的origin都用github代替
+git remote add origin ssh://git@192.168.2.100/volume1/gitRepos/learngit.git
+git remote add origin ssh://git@osolution.synology.me/volume1/gitRepos/learngit.git
 ------------------------------------
 --自定义git
 让Git显示颜色，会让命令输出看起来更醒目：	git config --global color.ui true

@@ -15,4 +15,11 @@
 15，通过git clone ssh://git@192.168.2.100/volume1/gitRepos/learngit.git将文件clone到本地
 16，通过git push -u origin master（第一次用-u,之后不需要）将本地文件推送（如果不是从服务器克隆下来的，需要先使用git remote add origin ssh://git@192.168.2.100/volume1/gitRepos/learngit.git 先进行关联,具体这方面的操作请参考studyRecord目录下的learnGitSummary.txt文档）
 
+git remote add origin ssh://git@192.168.2.100/volume1/gitRepos/learngit.git
+git remote add origin ssh://git@osolution.synology.me/volume1/gitRepos/learngit.git
+用 git remote -v 查看自定义的git remote 方法
+
+新创建一个文件的时候，如果没有任何文件或者没有进行 git add . 和 git commit -m 'frist' 的操作的时候，是没有办法备份的 
+
+
 

@@ -1,0 +1,10 @@
+之前自己在ubuntu14.04 的系统上很容易就能将Geany安装成功，但是换到16.04时就不好使了。找了一些博客，发现利用以下几条命令，可以很容易的将最新版本的Geany安装成功。
+
+安装Geany
+sudo add-apt-repository ppa:geany-dev/ppa
+
+sudo apt-get update
+
+sudo apt-get install geany
+卸载Geany
+sudo apt-get remove geany
